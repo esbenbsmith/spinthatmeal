@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dinner Options Spinning Wheel</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+  }
+  #wheel {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    border: 10px solid #333;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  }
+  #wheel canvas {
+    width: 100%;
+    height: 100%;
+  }
+  #spinButton {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  #result {
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+  <div>
+    <div id="wheel"></div>
+    <button id="spinButton">Spin the Wheel</button>
+    <div id="result"></div>
+  </div>
+
+<script>
+  const dinnerOptions = [
+    "Pizza",
+    "Sushi",
+    "Pasta",
+    "Tacos",
+    "Salad",
+    "Burgers",
+    "Curry",
+    "Steak"
+  ];
+
+  const wheel = document.getElementById('wheel');
+  const result = document.getElementById('result');
+  const spinButton = document.getElementById('spinButton');
+
+  // Create canvas for drawing the wheel
+  const canvas = document.createElement('canvas');
+  canvas.width = 300;
+  canvas.height = 300;
+  wheel.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+
+  const centerX = canvas.width / 2;
+  const centerY = canvas.height / 2;
+  const radius = 140;
+  const numOptions = dinnerOptions.length;
+  const arcSize = (2 * Math.PI) / numOptions;
+
+  // Colors for the segments
+  const colors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#66FF66', '#FF6666'];
+
+  let currentAngle = 0;
+  let spinning = false;
+
+  function drawWheel() {
+    for (let i = 0; i < numOptions; i++) {
+      const startAngle = currentAngle + i * arcSize;
+      const endAngle = startAngle + arcSize;
+
+      // Draw segment
+      ctx.beginPath();
+      ctx.moveTo(centerX, centerY);
+      ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+      ctx.fillStyle = colors[i % colors.length];
+      ctx.fill();
+      ctx.stroke();
+
+      // Draw text
+      ctx.save();
+      ctx.translate(centerX, centerY);
+      ctx.rotate(startAngle + arcSize / 2);
+      ctx.textAlign = "right";
+      ctx.fillStyle = "#000";
+      ctx.font = "bold 16px Arial";
+      ctx.fillText(dinnerOptions[i], radius - 10, 10);
+      ctx.restore();
+    }
+  }
+
+  function spinWheel() {
+    if (spinning) return;
+    spinning = true;
+    result.textContent = "";
+
+    let spinTime = 0;
+    const spinDuration = 4000; // 4 seconds
+    const spinSpeed = Math.random() * 10 + 10; // random speed
+
+    function animate() {
+      spinTime += 30;
+      if (spinTime >= spinDuration) {
+        spinning = false;
+        // Calculate the selected option
+        const degrees = (currentAngle * 180 / Math.PI) % 360;
+        const index = Math.floor((360 - degrees) / (360 / numOptions)) % numOptions;
+        result.textContent = `You should have: ${dinnerOptions[index]}`;
+        return;
+      }
+      currentAngle += spinSpeed * (1 - spinTime / spinDuration) * 0.1;
+      currentAngle %= 2 * Math.PI;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawWheel();
+      requestAnimationFrame(animate);
+    }
+    animate();
+  }
+
+  drawWheel();
+  spinButton.addEventListener('click', spinWheel);
+</script>
+</body>
+</html>
