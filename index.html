@@ -195,6 +195,8 @@
         }
         #saladWheelContainer {
             display: none;
+            justify-content: center;
+
         }
         .dinner-options {
             background: rgba(255, 255, 255, 0.1);
@@ -251,18 +253,23 @@
 </head>
 <body>
     <header>
-        <h1>Dinner Decision Maker</h1>
+      
         <div class="toggle-container">
-            <span class="toggle-label">Healthy Mode</span>
-            <label class="toggle-switch">
-                <input type="checkbox" id="healthyToggle">
-                <span class="slider"></span>
-            </label>
+            
         </div>
     </header>
     <div class="container">
         <div class="wheel-container" id="mainWheelContainer">
+            <h3>
+                <span class="toggle-label">Healthy Mode</span>
+                <label class="toggle-switch">
+                <input type="checkbox" id="healthyToggle">
+                <span class="slider"></span>
+                </label>
+            </h3> 
+
             <h2>Dinner Options</h2>
+
             
             <div class="wheel" id="wheel"></div>
             <div class="arrow" id="mainArrow"></div>
