@@ -135,19 +135,7 @@
         }
 
         }
-        .arrow {
-            position: absolute;
-            left: 100%;
-            top: 45%;
-            transform: translate(-50%, -50%) rotate(75deg); /* 3 o'clock, pointing right */
-            z-index: 10;
-            width: 0;
-            height: 0;
-            border-top: 40px solid transparent;
-            border-bottom: 25px solid transparent;
-            border-left: 40px solid #ffd166;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
-            display: block;
+       
         }
         @media (max-width: 400px) {
             .arrow {
@@ -288,13 +276,13 @@
 
             
             <div class="wheel" id="wheel"></div>
-            
+            <div class="arrow" id="mainArrow"></div>
             <div class="result" id="result"></div>
             <button id="spinButton">Spin Dinner Wheel</button>
         </div>
         <div class="wheel-container" id="saladWheelContainer">
             <h2>Salad Options</h2>
-       
+            <div class="arrow" id="saladArrow"></div>
             <div class="wheel" id="saladWheel"></div>
             <div class="result" id="saladResult"></div>
             <div class="controls">
