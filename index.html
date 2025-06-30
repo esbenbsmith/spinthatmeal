@@ -3,468 +3,380 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dinner & Salad Spinner</title>
+    <title>Minimalist Meal Wheel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
-            background: linear-gradient(135deg, #3494e6, #ec6ead);
-            color: white;
-            min-height: 100vh;
-           
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            overflow-x: hidden;
-        }
-
-        header {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            background: #f8f8f8;
+            color: #222;
+            font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,sans-serif;
+            margin: 0;
             padding: 0;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 0;
-            margin-bottom: 0;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-        }
-        h1 {
-            font-size: 2.5rem;
-            font-family: Montserrat;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-            background: linear-gradient(to right, #ff9966, #ff5e62);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-align: center;
-        }
-
-        h2  {
-            font-family: Georgia;
-        }
-
-        .toggle-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .toggle-label {
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 60px;
-            height: 30px;
-        }
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 34px;
-        }
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 22px;
-            width: 22px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-        input:checked + .slider {
-            background-color: #4CAF50;
-        }
-        input:checked + .slider:before {
-            transform: translateX(30px);
         }
         .container {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #1d1d1f;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+        .subtitle {
+            font-size: 1.08rem;
+            opacity: 0.7;
+            margin-bottom: 20px;
+        }
+        .controls {
+            background: #fff;
+            border-radius: 18px;
+            padding: 18px 10px;
+            margin-bottom: 22px;
+            box-shadow: 0 3px 16px rgba(0,0,0,0.04);
+            border: 1px solid #eee;
+        }
+        .control-group {
+            margin-bottom: 18px;
+        }
+        .control-group h2 {
+            margin-bottom: 10px;
+            font-size: 1.08rem;
+            color: #6e6e73;
+            font-weight: 500;
+            padding-left: 5px;
+        }
+        .btn-group {
             display: flex;
             flex-wrap: wrap;
+            gap: 10px;
+        }
+        .btn {
+            background: #f5f5f7;
+            border: 1px solid #e0e0e0;
+            color: #1d1d1f;
+            padding: 12px 16px;
+            border-radius: 14px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            min-width: 90px;
             justify-content: center;
-            gap: 40px;
-            max-width: 1200px;
-            width: 100%;
+        }
+        .btn.active {
+            background: #0071e3;
+            border-color: #0071e3;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 113, 227, 0.12);
         }
         .wheel-container {
             position: relative;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            width: 380px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            margin: 0 auto 18px;
+            width: 100%;
         }
-        .wheel-container h2 {
-            margin-bottom: 20px;
-            font-size: 1.8rem;
-            color: #ffd166;
-            text-align: center;
-        }
-        .wheel {
-            width: 300px;
-            height: 300px;
+        #wheel-canvas {
+            width: 100%;
+            max-width: 320px;
+            aspect-ratio: 1/1;
             border-radius: 50%;
-            border: 10px solid #333;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-            background: #222;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        }
-       
-        }
-        @media (max-width: 400px) {
-            .arrow {
-                border-top: 12px solid transparent;
-                border-bottom: 12px solid transparent;
-                border-left: 18px solid #ffd166;
-            }
-        }
-
-        canvas {
+            background: #fff;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.06);
             display: block;
-            margin: 0 auto;
-            width: 100%;
-            height: 100%;
         }
-        .controls {
-            display: flex;
-            gap: 15px;
-            margin-top: 15px;
+        #arrow {
+            position: absolute;
+            left: calc(100% + 8px);
+            top: 50%;
+            transform: translateY(-50%) rotate(90deg);
+            width: 0;
+            height: 0;
+            border-top: 14px solid transparent;
+            border-bottom: 14px solid transparent;
+            border-left: 24px solid #0071e3;
+            z-index: 2;
         }
-        button {
-            background: linear-gradient(to right, #ff9966, #ff5e62);
+        #spinButton {
+            display: block;
+            margin: 28px auto 0 auto;
+            background: #0071e3;
+            color: #fff;
             border: none;
-            color: white;
-            padding: 12px 25px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
             font-size: 1.1rem;
-            font-weight: 600;
-            margin: 10px 2px;
-            cursor: pointer;
-            border-radius: 50px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        }
-        button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
-        }
-        button:active {
-            transform: translateY(1px);
-        }
-        #backButton {
-            background: linear-gradient(to right, #4A00E0, #8E2DE2);
-        }
-        .result {
-            min-height: 60px;
-            padding: 15px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 15px;
-            margin: 15px 0;
+            border-radius: 16px;
+            padding: 14px 0;
             width: 100%;
-            text-align: center;
-            font-size: 1.4rem;
+            max-width: 320px;
+            cursor: pointer;
+            box-shadow: 0 2px 12px rgba(0,113,227,0.08);
             font-weight: 600;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+            letter-spacing: 0.02em;
+            transition: background 0.2s;
         }
-        #saladWheelContainer {
-            display: none;
-            justify-content: center;
-
-        }
-        .dinner-options {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 25px;
-            max-width: 300px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .dinner-options h2 {
-            color: #ffd166;
-            margin-bottom: 15px;
+        #spinButton:active { background: #005bb5; }
+        #result {
             text-align: center;
-            font-size: 1.8rem;
-        }
-        .options-list {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-        .option-item {
-            background: rgba(255, 255, 255, 0.15);
-            padding: 12px;
-            border-radius: 10px;
-            text-align: center;
-            font-weight: 500;
-            transition: transform 0.3s ease;
-        }
-        .option-item:hover {
-            transform: scale(1.05);
-            background: rgba(255, 255, 255, 0.25);
-        }
-        .salad-option {
-            color: #a8e6cf;
+            font-size: 1.18rem;
+            margin-top: 22px;
+            background: #fff;
+            border-radius: 14px;
+            padding: 16px 8px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.03);
+            color: #1d1d1f;
+            min-height: 36px;
         }
         .footer {
-            margin-top: 30px;
+            margin-top: 24px;
             text-align: center;
             font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.7);
+            color: #6e6e73;
+            opacity: 0.8;
         }
-        @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-                align-items: center;
-            }
-            .wheel-container, .dinner-options {
-                width: 100%;
-                max-width: 400px;
-            }
+        @media (max-width: 600px) {
+            .container { padding: 6px; }
+            h1 { font-size: 1.5rem; }
+            .controls { padding: 10px 3px; }
+            .btn { font-size: 0.92rem; min-width: 80px; padding: 11px 8px; }
+            #wheel-canvas { max-width: 95vw; }
+            #spinButton { max-width: 100vw; }
+        }
+        @media (max-width: 430px) {
+            .btn-group { flex-direction: column; }
+            .btn { width: 100%; }
         }
     </style>
 </head>
 <body>
+<div class="container">
     <header>
-      
-        <div class="toggle-container">
-            
-        </div>
+        <h1>Meal Wheel</h1>
+        <div class="subtitle">Spin to decide your next meal</div>
     </header>
-    <div class="container">
-        <div class="wheel-container" id="mainWheelContainer">
-            <h3>
-                <span class="toggle-label">Healthy Mode</span>
-                <label class="toggle-switch">
-                <input type="checkbox" id="healthyToggle">
-                <span class="slider"></span>
-                </label>
-            </h3> 
-
-            <h2>Dinner Options</h2>
-
-            
-            <div class="wheel" id="wheel"></div>
-            <div class="arrow" id="mainArrow"></div>
-            <div class="result" id="result"></div>
-            <button id="spinButton">Spin Dinner Wheel</button>
-        </div>
-        <div class="wheel-container" id="saladWheelContainer">
-            <h2>Salad Options</h2>
-            <div class="arrow" id="saladArrow"></div>
-            <div class="wheel" id="saladWheel"></div>
-            <div class="result" id="saladResult"></div>
-            <div class="controls">
-                <button id="saladSpinButton">Spin Salad Wheel</button>
-                <button id="backButton">Back to Dinner</button>
+    <div class="controls">
+        <div class="control-group">
+            <h2><i class="fas fa-utensils"></i> Meal Type</h2>
+            <div class="btn-group">
+                <button class="btn active" id="breakfastBtn"><i class="fas fa-sun"></i> Breakfast</button>
+                <button class="btn" id="lunchBtn"><i class="fas fa-sun"></i> Lunch</button>
+                <button class="btn" id="dinnerBtn"><i class="fas fa-moon"></i> Dinner</button>
             </div>
         </div>
-       
+        <div class="control-group">
+            <h2><i class="fas fa-leaf"></i> Dietary Preferences</h2>
+            <div class="btn-group">
+                <button class="btn" id="veganBtn"><i class="fas fa-seedling"></i> Vegan</button>
+                <button class="btn" id="vegetarianBtn"><i class="fas fa-carrot"></i> Vegetarian</button>
+                <button class="btn" id="healthyBtn"><i class="fas fa-heart"></i> Healthy</button>
+            </div>
+        </div>
     </div>
+    <div class="wheel-container">
+        <canvas id="wheel-canvas" width="320" height="320"></canvas>
+        <div id="arrow"></div>
+    </div>
+    <button id="spinButton"><i class="fas fa-sync-alt"></i> Spin the Wheel</button>
+    <div id="result">Ready to spin!</div>
     <div class="footer">
-        <p>Made with ❤️ | Spin the wheel to decide your dinner!</p>
+        <p>Made with <i class="fas fa-heart" style="color: #ff2d55;"></i> | Spin to decide your meal</p>
     </div>
-    <script>
-        const dinnerOptions = [
-            "Pizza",
-            "Sushi",
-            "Pasta",
-            "Tacos",
-            "Salad",
-            "Burgers",
-            "Curry",
-            "Steak",
-            "Thai"
-        ];
-        const saladOptions = [
-            "Caesar Salad",
-            "Greek Salad",
-            "Cobb Salad",
-            "Garden Salad",
-            "Caprese Salad",
-            "Waldorf Salad",
-            "Nicoise Salad",
-            "Fruit Salad"
-        ];
-        const wheel = document.getElementById('wheel');
-        const saladWheel = document.getElementById('saladWheel');
-        const result = document.getElementById('result');
-        const saladResult = document.getElementById('saladResult');
-        const spinButton = document.getElementById('spinButton');
-        const saladSpinButton = document.getElementById('saladSpinButton');
-        const backButton = document.getElementById('backButton');
-        const mainWheelContainer = document.getElementById('mainWheelContainer');
-        const saladWheelContainer = document.getElementById('saladWheelContainer');
-        const healthyToggle = document.getElementById('healthyToggle');
-        const mainArrow = document.getElementById('mainArrow');
-        const saladArrow = document.getElementById('saladArrow');
-        const canvas = document.createElement('canvas');
-        canvas.width = 300;
-        canvas.height = 300;
-        wheel.appendChild(canvas);
-        const ctx = canvas.getContext('2d');
-        const saladCanvas = document.createElement('canvas');
-        saladCanvas.width = 300;
-        saladCanvas.height = 300;
-        saladWheel.appendChild(saladCanvas);
-        const saladCtx = saladCanvas.getContext('2d');
-        const centerX = 150;
-        const centerY = 150;
-        const radius = 140;
-        const colors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#66FF66', '#FF6666','#FFFFFF'];
-        let mainCurrentAngle = 0;
-        let saladCurrentAngle = 0;
-        drawWheel(ctx, dinnerOptions, mainCurrentAngle);
-        drawWheel(saladCtx, saladOptions, saladCurrentAngle);
-        mainArrow.style.display = "block";
-        saladArrow.style.display = "block";
-        spinButton.addEventListener('click', spinMainWheel);
-        saladSpinButton.addEventListener('click', spinSaladWheel);
-        backButton.addEventListener('click', showMainWheel);
-        healthyToggle.addEventListener('change', function() {
-            if (this.checked) {
-                showSaladWheel();
-                result.textContent = "";
+</div>
+<script>
+    const mealOptions = {
+        breakfast: {
+            default: [
+                "Pancakes", "Omelette", "French Toast", "Yogurt",
+                "Avocado Toast", "Smoothie", "Breakfast Burrito", "Oatmeal"
+            ],
+            vegan: [
+                "Tofu Scramble", "Chia Pudding", "Vegan Pancakes", "Fruit Bowl",
+                "Vegan Burrito", "Overnight Oats", "Smoothie", "Avocado Toast"
+            ],
+            vegetarian: [
+                "Veggie Omelette", "Greek Yogurt", "Breakfast Sandwich",
+                "Cottage Cheese", "Quesadilla", "Frittata", "Bagel"
+            ],
+            healthy: [
+                "Greek Yogurt", "Egg White Omelette", "Protein Smoothie",
+                "Whole Grain Toast", "Quinoa Bowl", "Chia Pudding", "Oatmeal"
+            ]
+        },
+        lunch: {
+            default: [
+                "Sandwich", "Salad", "Soup", "Pasta",
+                "Burger", "Bowl", "Sushi", "Pizza"
+            ],
+            vegan: [
+                "Veggie Burger", "Buddha Bowl", "Lentil Soup", "Vegan Sushi",
+                "Chickpea Salad", "Vegan Pizza", "Stir Fry", "Quinoa"
+            ],
+            vegetarian: [
+                "Caprese Sandwich", "Veggie Wrap", "Vegetable Soup", "Pasta",
+                "Margherita Pizza", "Lasagna", "Falafel", "Quesadilla"
+            ],
+            healthy: [
+                "Grilled Chicken", "Quinoa Bowl", "Turkey Wrap",
+                "Vegetable Soup", "Sushi", "Buddha Bowl", "Stir Fry", "Salmon"
+            ]
+        },
+        dinner: {
+            default: [
+                "Steak", "Pasta", "Salmon", "Stir Fry",
+                "Tacos", "Pizza", "Curry", "Burger"
+            ],
+            vegan: [
+                "Vegan Curry", "Tofu Stir Fry", "Lentil Pasta", "Vegan Burger",
+                "Stuffed Peppers", "Mushroom Risotto", "Vegan Tacos", "Chickpea Curry"
+            ],
+            vegetarian: [
+                "Vegetable Lasagna", "Mushroom Risotto", "Spinach Pie", "Vegetable Curry",
+                "Stuffed Peppers", "Eggplant", "Vegetable Stir Fry", "Quiche"
+            ],
+            healthy: [
+                "Grilled Salmon", "Chicken Stir Fry", "Quinoa Bowl", "Turkey Chili",
+                "Baked Cod", "Vegetable Soup", "Lean Beef", "Chicken Salad"
+            ]
+        }
+    };
+    let currentMealType = 'breakfast';
+    let dietaryPrefs = { vegan: false, vegetarian: false, healthy: false };
+    const breakfastBtn = document.getElementById('breakfastBtn');
+    const lunchBtn = document.getElementById('lunchBtn');
+    const dinnerBtn = document.getElementById('dinnerBtn');
+    const veganBtn = document.getElementById('veganBtn');
+    const vegetarianBtn = document.getElementById('vegetarianBtn');
+    const healthyBtn = document.getElementById('healthyBtn');
+    const wheelCanvas = document.getElementById('wheel-canvas');
+    const ctx = wheelCanvas.getContext('2d');
+    const result = document.getElementById('result');
+    const spinButton = document.getElementById('spinButton');
+
+    breakfastBtn.onclick = () => setMealType('breakfast');
+    lunchBtn.onclick = () => setMealType('lunch');
+    dinnerBtn.onclick = () => setMealType('dinner');
+    veganBtn.onclick = () => toggleDietaryPref('vegan');
+    vegetarianBtn.onclick = () => toggleDietaryPref('vegetarian');
+    healthyBtn.onclick = () => toggleDietaryPref('healthy');
+
+    function setMealType(type) {
+        currentMealType = type;
+        breakfastBtn.classList.toggle('active', type === 'breakfast');
+        lunchBtn.classList.toggle('active', type === 'lunch');
+        dinnerBtn.classList.toggle('active', type === 'dinner');
+        drawWheel();
+    }
+    function toggleDietaryPref(pref) {
+        dietaryPrefs[pref] = !dietaryPrefs[pref];
+        veganBtn.classList.toggle('active', dietaryPrefs.vegan);
+        vegetarianBtn.classList.toggle('active', dietaryPrefs.vegetarian);
+        healthyBtn.classList.toggle('active', dietaryPrefs.healthy);
+        drawWheel();
+    }
+    function getCurrentMealOptions() {
+        if (dietaryPrefs.vegan) return mealOptions[currentMealType].vegan;
+        if (dietaryPrefs.vegetarian) return mealOptions[currentMealType].vegetarian;
+        if (dietaryPrefs.healthy) return mealOptions[currentMealType].healthy;
+        return mealOptions[currentMealType].default;
+    }
+    function drawWheel(angle=0, highlightIndex=null) {
+        const options = getCurrentMealOptions();
+        const numOptions = options.length;
+        const size = wheelCanvas.width;
+        const center = size / 2;
+        const radius = center - 8;
+        const arc = 2 * Math.PI / numOptions;
+        const colors = ['#ff9aa2', '#ffb7b2', '#ffdac1', '#e2f0cb', '#b5ead7', '#c7ceea', '#f8b195', '#f67280'];
+        ctx.clearRect(0, 0, size, size);
+        ctx.save();
+        ctx.translate(center, center);
+        ctx.rotate(angle);
+        for (let i = 0; i < numOptions; i++) {
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.arc(0, 0, radius, i * arc, (i + 1) * arc);
+            ctx.closePath();
+            ctx.fillStyle = (highlightIndex === i) ? "#fff700" : colors[i % colors.length];
+            ctx.globalAlpha = (highlightIndex === i) ? 0.8 : 1;
+            ctx.fill();
+            ctx.globalAlpha = 1;
+            ctx.strokeStyle = "#fff";
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            ctx.save();
+            ctx.rotate(i * arc + arc / 2);
+            ctx.textAlign = "right";
+            ctx.fillStyle = (highlightIndex === i) ? "#0071e3" : "#222";
+            ctx.font = `bold ${Math.max(13, size/24)}px sans-serif`;
+            ctx.fillText(options[i], radius - 16, 8);
+            ctx.restore();
+        }
+        ctx.restore();
+    }
+    function resizeCanvas() {
+        // Set canvas size to parent width (max 320px)
+        const container = document.querySelector('.wheel-container');
+        const size = Math.min(container.offsetWidth, 320);
+        wheelCanvas.width = size;
+        wheelCanvas.height = size;
+        drawWheel(currentAngle);
+    }
+    window.addEventListener('resize', resizeCanvas);
+
+    let currentAngle = 0;
+    let spinning = false;
+    spinButton.onclick = function() {
+        if (spinning) return;
+        const options = getCurrentMealOptions();
+        if (!options.length) {
+            result.textContent = "No options available - adjust your filters";
+            return;
+        }
+        spinning = true;
+        spinButton.disabled = true;
+        result.textContent = "Spinning...";
+        const numOptions = options.length;
+        const arc = 2 * Math.PI / numOptions;
+        const winnerIdx = Math.floor(Math.random() * numOptions);
+        const finalAngle = (3 * Math.PI / 2) - (winnerIdx * arc) - (arc / 2);
+        const totalSpins = 6;
+        const startAngle = currentAngle % (2 * Math.PI);
+        const endAngle = totalSpins * 2 * Math.PI + finalAngle;
+        let spinTime = 0;
+        const spinDuration = 3000;
+        function animate() {
+            spinTime += 16;
+            const t = Math.min(spinTime / spinDuration, 1);
+            const ease = 1 - Math.pow(1 - t, 3);
+            currentAngle = startAngle + (endAngle - startAngle) * ease;
+            drawWheel(currentAngle);
+            if (t < 1) {
+                requestAnimationFrame(animate);
             } else {
-                showMainWheel();
-            }
-        });
-        function drawWheel(context, options, currentAngle) {
-            context.clearRect(0, 0, 300, 300);
-            const numOptions = options.length;
-            const arcSize = (2 * Math.PI) / numOptions;
-            for (let i = 0; i < numOptions; i++) {
-                const startAngle = currentAngle + i * arcSize;
-                const endAngle = startAngle + arcSize;
-                context.beginPath();
-                context.moveTo(centerX, centerY);
-                context.arc(centerX, centerY, radius, startAngle, endAngle);
-                context.fillStyle = colors[i % colors.length];
-                context.fill();
-                context.strokeStyle = '#333';
-                context.lineWidth = 2;
-                context.stroke();
-                context.save();
-                context.translate(centerX, centerY);
-                context.rotate(startAngle + arcSize / 2);
-                context.textAlign = "right";
-                context.fillStyle = "#000";
-                context.font = "bold 14px Arial";
-                context.fillText(options[i], radius - 15, 10);
-                context.restore();
-            }
-            context.beginPath();
-            context.arc(centerX, centerY, 20, 0, 2 * Math.PI);
-            context.fillStyle = '#333';
-            context.fill();
-            context.strokeStyle = '#fff';
-            context.lineWidth = 2;
-            context.stroke();
-        }
-        function spinMainWheel() {
-            if (healthyToggle.checked) {
-                showSaladWheel();
-                result.textContent = "";
-                return;
-            }
-            let spinning = true;
-            result.textContent = "";
-            let spinTime = 0;
-            const spinDuration = 4000;
-            const numOptions = dinnerOptions.length;
-            const arcSize = 2 * Math.PI / numOptions;
-            const index = Math.floor(Math.random() * numOptions);
-            // To land at 12 o'clock (top), we want the center of the winning segment at -Math.PI/2
-            const finalAngle = - (index * arcSize) - (arcSize / 2);
-            const totalSpins = 6;
-            const startAngle = mainCurrentAngle;
-            const endAngle = totalSpins * 2 * Math.PI + finalAngle;
-            function animate() {
-                spinTime += 30;
-                const progress = Math.min(spinTime / spinDuration, 1);
-                const ease = 1 - Math.pow(1 - progress, 3);
-                mainCurrentAngle = startAngle + (endAngle - startAngle) * ease;
-                drawWheel(ctx, dinnerOptions, mainCurrentAngle);
-                if (progress < 1) {
-                    requestAnimationFrame(animate);
-                } else {
+                drawWheel(currentAngle, winnerIdx);
+                result.textContent = `You should have: ${options[winnerIdx]}`;
+                setTimeout(() => {
+                    drawWheel(currentAngle);
                     spinning = false;
-                    result.textContent = `Tonight's Dinner: ${dinnerOptions[index]}`;
-                    if (dinnerOptions[index] === "Salad") {
-                        setTimeout(showSaladWheel, 1500);
-                    }
-                }
+                    spinButton.disabled = false;
+                }, 1200);
             }
-            animate();
         }
-        function spinSaladWheel() {
-            let spinning = true;
-            saladResult.textContent = "";
-            let spinTime = 0;
-            const spinDuration = 4000;
-            const numOptions = saladOptions.length;
-            const arcSize = 2 * Math.PI / numOptions;
-            const index = Math.floor(Math.random() * numOptions);
-            const finalAngle = - (index * arcSize) - (arcSize / 2);
-            const totalSpins = 6;
-            const startAngle = saladCurrentAngle;
-            const endAngle = totalSpins * 2 * Math.PI + finalAngle;
-            function animate() {
-                spinTime += 30;
-                const progress = Math.min(spinTime / spinDuration, 1);
-                const ease = 1 - Math.pow(1 - progress, 3);
-                saladCurrentAngle = startAngle + (endAngle - startAngle) * ease;
-                drawWheel(saladCtx, saladOptions, saladCurrentAngle);
-                if (progress < 1) {
-                    requestAnimationFrame(animate);
-                } else {
-                    spinning = false;
-                    saladResult.textContent = `Your Salad: ${saladOptions[index]}`;
-                }
-            }
-            animate();
-        }
-        function showSaladWheel() {
-            mainWheelContainer.style.display = "none";
-            saladWheelContainer.style.display = "block";
-            saladResult.textContent = "";
-        }
-        function showMainWheel() {
-            saladWheelContainer.style.display = "none";
-            mainWheelContainer.style.display = "block";
-            result.textContent = "";
-        }
-    </script>
+        animate();
+    };
+    resizeCanvas();
+    window.addEventListener('DOMContentLoaded', resizeCanvas);
+</script>
 </body>
 </html>
