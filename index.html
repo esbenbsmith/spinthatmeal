@@ -97,7 +97,7 @@
             box-shadow: 0 2px 16px rgba(0,0,0,0.06);
             display: block;
         }
-
+        #arrow { display: none !important; }
         #spinButton {
             display: block;
             margin: 28px auto 0 auto;
@@ -313,7 +313,7 @@
         ctx.restore();
     }
     function resizeCanvas() {
-        // Set canvas size to parent width (max 320px)
+        // Set canvas size to parent width (max 320 px)
         const container = document.querySelector('.wheel-container');
         const size = Math.min(container.offsetWidth, 320);
         wheelCanvas.width = size;
